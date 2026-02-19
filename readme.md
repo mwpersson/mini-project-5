@@ -139,14 +139,21 @@ Convolutional filter activations are visualized for the baseline model, showing:
 
 ## Team Member Contributions
 
-This project was developed as a comprehensive machine learning demonstration:
+### Michael Persson
+- EDA/Data preprocessing
+- Baseline Model
+- Experimental Model
+- Feature Map
+- Readme
+- Report
 
-- **Data Acquisition & Preprocessing:** Dataset collection, duplicate removal, train-validation-test split
-- **Exploratory Data Analysis:** Class distribution analysis, sample visualization, batch inspection
-- **Model Architecture Design:** Three distinct CNN architectures with varying regularization strategies
-- **Training & Evaluation:** Training pipelines with performance monitoring, comprehensive metric computation
-- **Visualization & Analysis:** Training curves, confusion matrices, feature map visualization, detailed comparisons
-- **Documentation:** Model specifications, results analysis, findings interpretation
+### Ledja Halltari
+- Baseline Model
+- Augmented Model
+- Feature Map
+- Learned filters
+- Readme
+- Report
 
 ## Future Improvements
 
