@@ -80,10 +80,10 @@ See `requirements.txt` for complete list:
 
 | Metric | Baseline Model | Augmented Model | Experimental Model |
 |--------|---|---|---|
-| **Train Accuracy** | 98.71% | 98.86% | N/A |
-| **Validation Accuracy** | 98.83% | 80.66% | N/A |
-| **Test Accuracy** | 99.02% | 82.81% | N/A |
-| **Test Loss** | 0.0304 | 1.0311 | N/A |
+| **Train Accuracy** | 92.18% | 85.55% | 97.20% |
+| **Validation Accuracy** | 92.77% | 63.09% | 97.07% |
+| **Test Accuracy** | 93.16% | 60.74% | 98.44% |
+| **Test Loss** | 0.1577 | 1.8068 | 0.0465 |
 | **Training Epochs** | 20 | 20 | 60 |
 
 ### Model Architectures
@@ -92,8 +92,10 @@ See `requirements.txt` for complete list:
 - 3 Convolutional blocks (32, 64, 128 filters)
 - MaxPooling after each Conv block
 - 2 Dense layers (128 units, softmax output)
-- **Parameters:** ~340K
-- **Best Test Accuracy:** 99.02%
+- **Parameters:** ~684K
+- **Best Test Accuracy:** 93.16%
+
+![Baseline Model Architecture](images/basic.png)
 
 **Augmented Model (model_augmented):**
 - Input normalization (rescaling to [0, 1])
@@ -101,40 +103,32 @@ See `requirements.txt` for complete list:
 - 3 Convolutional blocks with BatchNormalization
 - MaxPooling and Dropout (0.3)
 - 2 Dense layers
-- **Parameters:** ~350K
-- **Best Test Accuracy:** 82.81%
+- **Parameters:** ~685K
+- **Best Test Accuracy:** 60.74%
+
+![Augmented Model Architecture](images/augmented.png)
 
 **Experimental Model (model_experimental):**
-- Similar architecture with GlobalAveragePooling2D
+- 4 Convolutional blocks (32, 32, 64, 64 filters)
 - AdamW optimizer
+- GlobalAveragePooling2D
 - Extended training (60 epochs)
 - Tested for longer convergence
+- **Parameters:** ~66K
+- **Best Test Accuracy:** 98.44%
+
+![Experimental Model Architecture](images/experimental.png)
 
 ### Key Findings
+1. **Experimental Model Performance:** The experimental model achieved 98.44% test accuracy, significantly outperforming both baseline (93.16%) and augmented (60.74%) models. This superior performance stems from architectural innovations including GlobalAveragePooling2D and the AdamW optimizer.
 
-1. **Baseline Dominance:** The baseline model without augmentation achieved a good test accuracy (99.02%), indicating the satellite images are relatively distinct and well-separated in feature space.
+2. **Impact of Data Augmentation:** Contrary to expectations, aggressive data augmentation in the augmented model resulted in poor generalization (60.74% test accuracy vs. 93.16% baseline). The large train-val accuracy gap (22.46%) indicates overfitting despite regularization techniques.
 
-2. **Augmentation Trade-off:** While data augmentation is typically beneficial, it degraded performance in this project, suggesting:
-   - The dataset is sufficiently diverse without augmentation
-   - Strong augmentation (rotation, zoom) may disrupt spatial relationships critical for satellite classification
-   - The baseline model achieved low generalization gap (Val Acc: 98.83%), indicating sufficient regularization
+3. **Model Complexity Trade-off:** The experimental model achieved the best results with fewer parameters (~66K) compared to baseline (~684K), demonstrating that architectural efficiency and proper regularization outweigh parameter count.
 
-3. **Validation Gap:** The augmented model shows significant overfitting (Val Acc: 80.66% vs Test Acc: 82.81%), despite dropout regularization.
+4. **Optimization Strategy:** Extended training (60 epochs) combined with AdamW optimizer proved essential for the experimental model's convergence, while baseline model saturated at 20 epochs.
 
-4. **Model Efficiency:** All models achieved strong accuracy with similar parameter counts (~340K), demonstrating efficient architecture design.
-
-### Training Curves
-
-The training curves show:
-- **Baseline:** Smooth convergence with minimal train-val gap
-- **Augmented:** Faster initial learning but higher variance in validation performance
-- **Loss Stability:** Both models achieve low loss values, with baseline showing more stable optimization
-
-The notebook includes comprehensive visualization of model predictions across test samples:
-
-- **Green correct predictions** indicate accurate classifications
-- **Red incorrect predictions** highlight misclassified samples
-- **Confidence scores** show model certainty for each prediction
+5. **Regularization Effectiveness:** BatchNormalization and Dropout were effective in the augmented model for reducing overfitting, but only when balanced with appropriate augmentation intensity. GlobalAveragePooling2D further reduced model capacity while maintaining accuracy.
 
 ### Feature Map Visualization
 
